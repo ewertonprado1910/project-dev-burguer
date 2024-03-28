@@ -5,7 +5,6 @@ const port = 3000
 const app = express()
 app.use(express.json())
 
-
 const pedidos = []
 
 app.get("/order", (request, response) => {
@@ -20,7 +19,6 @@ app.post("/order", (request, response) => {
     pedidos.push(user)
 
     return response.status(201).json(user)
-
 })
 
 app.put("/order/:id", (request, response) => {
@@ -41,7 +39,19 @@ app.put("/order/:id", (request, response) => {
 
 })
 
+app.delete("/order/:id", (request, response) => {
+    const {id} = request.params
+    const index = pedidos.findIndex(item => item.id === id)
 
+    if(index < 0) {
+        return response.status(404).json({menssage: "Not found order"})
+    }
+
+    pedidos.splice(index, 1)
+
+    return response.status(204).json()
+
+})
 
 app.listen(port, () => {
     console.log(`🚀 Server, starting port ${port}`)
